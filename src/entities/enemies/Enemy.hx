@@ -11,6 +11,7 @@ class Enemy extends Entity {
 		super(x, y);
 		type = "enemy";
 		enemyName = "enemy";
+
 	}
 
 

@@ -18,7 +18,7 @@ class Decorative extends Entity {
 	public override function update() {
 		if(cast(HXP.scene, scenes.TestScene).moving) {
 			moveBy(-7, 0);
-			if(x + width <= 0) {
+			if(x + 100 <= 0) {
 				HXP.scene.remove(this);
 			}
 		}

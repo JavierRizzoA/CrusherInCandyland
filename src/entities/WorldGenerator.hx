@@ -9,35 +9,57 @@ class WorldGenerator extends Entity {
 
 	private var popSticks:Array<String>;
 	private var lollipops:Array<String>;
+	private var simpleCandies:Array<String>;
 
 	private var timeSinceBlock:Float;
 	private var timeSincePop:Float;
+	private var timeSinceSimpleCandy:Float;
+	private var timeSinceDecor:Float;
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
 
 		visible = false;
-		timeSinceBlock = 0;
-		timeSincePop = 0;
 
-		popSticks = ["lollipopBase.png", "lollipopBaseBeige.png", "lollipopBaseBrown.png"];
-		lollipops = ["lollipopFruitGreen.png", "lollipopFruitRed.png", "lollipopFruitYellow.png", "lollipopGreen.png", "lollipopRed.png", "lollipopWhiteGreen.png", "lollipopWhiteRed.png"];
+		timeSinceDecor = 1;
+		timeSinceBlock = 0;
+		timeSincePop = 1;
+		timeSinceSimpleCandy = 1;
+
+		popSticks = ["lollipopBase", "lollipopBaseBeige", "lollipopBaseBrown"];
+		lollipops = ["lollipopFruitGreen", "lollipopFruitRed", "lollipopFruitYellow", "lollipopGreen", "lollipopRed", "lollipopWhiteGreen", "lollipopWhiteRed"];
+		simpleCandies = ["candyBlue", "candyGreen", "candyRed", "candyYellow", "canePinkSmall", "heart"];
 
 
 	}	
 
+	private function decorate() {
+		timeSinceDecor += HXP.elapsed;
+		createLollipop();
+		createSimpleCandy();
+	}
+
 
 	private function createLollipop() {
-
-		
-
 		timeSincePop += HXP.elapsed;
 
-		if(timeSincePop >= 0.5) {
+		if(timeSincePop >= 0.5 && timeSinceDecor > 0.01) {
 			if(Std.random(100) == 0) {
-				HXP.scene.add(new entities.Decorative(HXP.width, 315, new Image("graphics/decorative/" + lollipops[Std.random(7)])));
-				HXP.scene.add(new entities.Decorative(HXP.width, 385, new Image("graphics/decorative/" + popSticks[Std.random(3)])));
+				HXP.scene.add(new entities.Decorative(HXP.width, 315, new Image("graphics/decorative/" + lollipops[Std.random(7)] + ".png")));
+				HXP.scene.add(new entities.Decorative(HXP.width, 385, new Image("graphics/decorative/" + popSticks[Std.random(3)] + ".png")));
 				timeSincePop = 0;
+				timeSinceDecor = 0;
+			}
+		}
+	}
+
+	private function createSimpleCandy() {
+		timeSinceSimpleCandy += HXP.elapsed;
+		if(timeSinceSimpleCandy >= 0.5 && timeSinceDecor > 0.01) {
+			if(Std.random(100) == 0) {
+				HXP.scene.add(new entities.Decorative(HXP.width, 385, new Image("graphics/decorative/" + simpleCandies[Std.random(6)] + ".png")));
+				timeSinceSimpleCandy = 0;
+				timeSinceDecor = 0;
 			}
 		}
 	}
@@ -55,16 +77,9 @@ class WorldGenerator extends Entity {
 	}
 
 	public override function update() {
-		/*var rnd:Int = Std.random(100);
-		if(rnd == 0) {
-			add(new entities.enemies.Blocker(HXP.width + 50, 404));
-		}
-		if(rnd == 1) {
-			createLollipop();
-		}
-		super.update();*/
+
 		createBlock();
-		createLollipop();
+		decorate();
 		super.update();
 
 

@@ -28,9 +28,8 @@ class GameOver extends Scene {
 		addGraphic(bgImage);
 		addGraphic(scoreText);
 		addGraphic(new Text("Killed by:", 495, 176, {color: 0x000000, size: 20}), 0);
-		//addGraphic(killerText, 533 - killerText.textWidth / 2, 280);
 		addGraphic(killerImage, 0, 510, 220);
-		addGraphic(killerText, 533 - killerText.textWidth / 2, 280);
+		addGraphic(killerText, 535 - killerText.textWidth / 2, 290);
 		add(playButton);
 		playButton.x -= playButton.width / 2;
 		playButton.y -= playButton.height / 2;
