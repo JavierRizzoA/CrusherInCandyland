@@ -120,7 +120,7 @@ class Player extends Entity {
 			die(cast(e, entities.enemies.Enemy).enemyName);
 		}
 	}
-
+	
 	public function isJumping():Bool {
 		if(jumping) {
 			return true;
@@ -142,6 +142,7 @@ class Player extends Entity {
 	}
 
 	private function die(killer:String):Void {
+		//HXP.engine.paused = true;
 		HXP.scene = new scenes.GameOver(score, killer);
 	}
 
