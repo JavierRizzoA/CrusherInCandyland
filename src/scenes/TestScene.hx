@@ -10,6 +10,7 @@ class TestScene extends Scene {
 	public var player:entities.Player;
 	private var score:Text;
 	private var timeAcum:Float;
+	public var moving:Bool;
 
 	public function new() {
 		super();
@@ -20,6 +21,8 @@ class TestScene extends Scene {
 		score = new Text("0", 10, 10, {color: 0x000000, size: 20});
 		timeAcum = 0;
 
+		moving = true;
+
 
 		for(a in 0 ... 11) {
 			add(new entities.Floor(a * 70, 455));
@@ -29,23 +32,21 @@ class TestScene extends Scene {
 		add(player);
 		add(new entities.WorldGenerator(0, 0));
 
-		//createLollipop();
-		//add(new entities.enemies.Blocker(HXP.width + 50, 404));
 	}
 
 	private function displayScore() {
 		score.text = "" + player.getScore();
 	}
 
-	private function secondTick() {
+	private function halfSecondTick() {
 		timeAcum = 0;
 		player.giveScore(1);
 	}
 
 	public override function update() {
 		timeAcum += HXP.elapsed;
-		if(timeAcum >= 1) {
-			secondTick();
+		if(timeAcum >= 0.5 && moving) {
+			halfSecondTick();
 		}
 		/*var rnd:Int = Std.random(100);
 		if(rnd == 0) {

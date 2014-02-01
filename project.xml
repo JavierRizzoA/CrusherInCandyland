@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	<meta title="CandyGame" package="com.example.app" version="1.0.0" company="" />
+	<meta title="Crusher in Candyland" package="com.cimars.cic" version="1.0.0" company="CIMARS" />
 
  	<app file="Main" main="Main" path="bin" />
 

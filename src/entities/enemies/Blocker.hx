@@ -14,6 +14,7 @@ class Blocker extends Enemy {
 
 		setHitbox(51, 51);
 		type = "enemy";
+		enemyName = "Blocker";
 
 		madGraphic = new Image("graphics/enemies/blockerMad.png");
 		sadGraphic = new Image("graphics/enemies/blockerSad.png");

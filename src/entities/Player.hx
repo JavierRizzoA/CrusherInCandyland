@@ -116,8 +116,8 @@ class Player extends Entity {
 	private function checkCollision() {
 		var e:Entity = collide("enemy", x, y);
 		if(e != null) {
-			HXP.engine.paused = true;
-			//HXP.scene = new scenes.TestScene();
+			//HXP.engine.paused = true;
+			die(cast(e, entities.enemies.Enemy).enemyName);
 		}
 	}
 
@@ -141,6 +141,10 @@ class Player extends Entity {
 		swordDrawn = false;
 	}
 
+	private function die(killer:String):Void {
+		HXP.scene = new scenes.GameOver(score, killer);
+	}
+
 	public override function update() {
 		handleInput();
 		checkCollision();
@@ -151,7 +155,6 @@ class Player extends Entity {
 			moveBy(0, 10, "floor");
 		}
 
-		//score++;
 
 		super.update();
 	}
