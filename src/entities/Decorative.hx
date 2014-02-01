@@ -8,10 +8,12 @@ class Decorative extends Entity {
 
 	
 
-	public function new(x:Float, y:Float, image:Image) {
+	public function new(x:Float, y:Float, image:Image, ?transparency = true) {
 		super(x, y);
 		layer = 100;
-		image.alpha = 0.5;
+		if(transparency) {
+			image.alpha = 0.5;
+		}
 		graphic = image;
 	}
 

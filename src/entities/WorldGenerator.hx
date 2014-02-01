@@ -15,6 +15,7 @@ class WorldGenerator extends Entity {
 	private var timeSincePop:Float;
 	private var timeSinceSimpleCandy:Float;
 	private var timeSinceDecor:Float;
+	private var timeSinceSpider:Float;
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
@@ -25,6 +26,7 @@ class WorldGenerator extends Entity {
 		timeSinceBlock = 0;
 		timeSincePop = 1;
 		timeSinceSimpleCandy = 1;
+		timeSinceSpider = -5;
 
 		popSticks = ["lollipopBase", "lollipopBaseBeige", "lollipopBaseBrown"];
 		lollipops = ["lollipopFruitGreen", "lollipopFruitRed", "lollipopFruitYellow", "lollipopGreen", "lollipopRed", "lollipopWhiteGreen", "lollipopWhiteRed"];
@@ -76,10 +78,21 @@ class WorldGenerator extends Entity {
 		} 		
 	}
 
+	private function createSpider() {
+		timeSinceSpider += HXP.elapsed;
+		if(timeSinceSpider >= 1) {
+			if(Std.random(200) == 0) {
+				HXP.scene.add(new entities.enemies.Spider(HXP.width + 50, 404));
+				timeSinceSpider = 0;
+			}
+		}
+	}
+
 	public override function update() {
 
 		createBlock();
 		decorate();
+		createSpider();
 		super.update();
 
 
