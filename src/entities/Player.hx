@@ -11,7 +11,6 @@ import com.haxepunk.masks.Pixelmask;
 class Player extends Entity {
 
 	private var jumping:Bool;
-	private var onFloor:Bool;
 	private var jumpMaxHeight:Float;
 	private var jumpHeight:Float;
 
@@ -36,7 +35,6 @@ class Player extends Entity {
 		Input.define("sword", [Key.D]);
 
 		jumping = false;
-		onFloor = true;
 
 		frameAcum = 0;
 		currentAnim = 1;
@@ -57,7 +55,7 @@ class Player extends Entity {
 	private function handleInput() {
 
 		if(Input.pressed("jump")) {
-			if(onFloor) {
+			if(onFloor()) {
 				jumping = true;
 				jumpMaxHeight = y - 150;
 				jumpHeight = 0;
@@ -76,7 +74,7 @@ class Player extends Entity {
 	}
 
 	private function updateAnim(updateTime:Float) {
-		if(onFloor) {
+		if(onFloor()) {
 			frameAcum += updateTime;
 			if(frameAcum >= 0.03) {
 				if(currentAnim == 10) {
@@ -98,19 +96,10 @@ class Player extends Entity {
 	private function jump() {
 		if(y > jumpMaxHeight) {
 			moveBy(0, -8);
-
 			jumpHeight += 8;
-			onFloor = false;
 		} else {
 			jumping = false;
 		}
-	}
-
-	public override function moveCollideY(e:Entity) {
-		if(e.type == "floor") {
-			onFloor = true;
-		}
-		return true;
 	}
 
 	private function checkCollision() {
@@ -146,15 +135,39 @@ class Player extends Entity {
 		HXP.scene = new scenes.GameOver(score, killer);
 	}
 
+	private function onFloor():Bool {
+		var f:Entity = collide("floor", x, y);
+		if(f != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private function applyGravity():Void {
+		if(jumping) {
+			jump();
+		} else if(!onFloor()) {
+			moveBy(0, 10);
+
+			var f:Entity = collide("floor", x, y);
+			if(f != null) {
+				y = f.y - 91;
+			}
+		}
+	}
+
+
 	public override function update() {
 		handleInput();
 		checkCollision();
 		updateAnim(HXP.elapsed);
-		if(jumping) {
+		applyGravity();
+		/*if(jumping) {
 			jump();
 		} else if(!onFloor) {
 			moveBy(0, 10, "floor");
-		}
+		}*/
 
 
 		super.update();
