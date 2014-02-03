@@ -32,6 +32,8 @@ class Sword extends Entity {
 			offset++;
 			if(cast(HXP.scene, scenes.TestScene).player.isJumping()) {
 				moveTo(cast(HXP.scene, scenes.TestScene).player.x + 45 + offset, cast(HXP.scene, scenes.TestScene).player.y + 10);
+			} else if(cast(HXP.scene, scenes.TestScene).player.isCrouching) {
+				moveTo(cast(HXP.scene, scenes.TestScene).player.x + 45 + offset, cast(HXP.scene, scenes.TestScene).player.y + 25);
 			} else {
 				moveTo(cast(HXP.scene, scenes.TestScene).player.x + 45 + offset, cast(HXP.scene, scenes.TestScene).player.y + 35);
 			}

@@ -24,6 +24,10 @@ class Player extends Entity {
 
 	private var swordDrawn:Bool;
 
+	public var isCrouching:Bool;
+	private var crouchImg:Image;
+	private var crouchTime:Float;
+
 	public function new(x:Float, y:Float) {
 		super(x, y);
 
@@ -31,8 +35,8 @@ class Player extends Entity {
 		type = "player";
 
 		Input.define("jump", [Key.SPACE]);
-		Input.define("pause", [Key.P]);
 		Input.define("sword", [Key.D]);
+		Input.define("crouch", [Key.S]);
 
 		jumping = false;
 
@@ -45,6 +49,9 @@ class Player extends Entity {
 		jumpingAnim = new Image("graphics/player/jump.png");
 		jumpingMask = new Pixelmask("graphics/player/jump.png");
 
+		isCrouching = false;
+		crouchImg = new Image("graphics/player/crouch.png");
+
 
 		graphic = walkingAnims[0];
 		//mask = walkingMasks[0];
@@ -56,39 +63,48 @@ class Player extends Entity {
 
 		if(Input.pressed("jump")) {
 			if(onFloor()) {
+				if(isCrouching) {
+					getUp();
+				}
 				jumping = true;
 				jumpMaxHeight = y - 150;
 				jumpHeight = 0;
 			}
 		}
 
-		if(Input.check("pause")) {
-			//HXP.engine.paused = false;
-			//HXP.scene = new scenes.TestScene();
-		}
-
-		if(Input.pressed("sword") && !swordDrawn) {
+		if(Input.pressed("sword") && !swordDrawn) {	
 			HXP.scene.add(new entities.items.Sword(x + 45, y + 35));
 			swordDrawn = true;
+		}
+		if(Input.pressed("crouch") && !jumping) {
+			crouch();
 		}
 	}
 
 	private function updateAnim(updateTime:Float) {
 		if(onFloor()) {
-			frameAcum += updateTime;
-			if(frameAcum >= 0.03) {
-				if(currentAnim == 10) {
-					currentAnim = 0;
-				} else {
-					currentAnim++;
+			if(isCrouching) {
+				crouchTime += HXP.elapsed;
+				if(crouchTime >= 0.4) {
+					getUp();
 				}
-				frameAcum = 0;
-				graphic = walkingAnims[currentAnim];
-				//mask = walkingMasks[currentAnim];
+			} else {
+				frameAcum += updateTime;
+				if(frameAcum >= 0.03) {
+					if(currentAnim == 10) {
+						currentAnim = 0;
+					} else {
+						currentAnim++;
+					}
+					frameAcum = 0;
+					graphic = walkingAnims[currentAnim];
+					//mask = walkingMasks[currentAnim];
+				}	
 			}
 		} else {
-			graphic = jumpingAnim;
-			//mask = jumpingMask;
+			if(!isCrouching) {
+				graphic = jumpingAnim;
+			}
 		}
 	}
 
@@ -147,14 +163,29 @@ class Player extends Entity {
 	private function applyGravity():Void {
 		if(jumping) {
 			jump();
-		} else if(!onFloor()) {
-			moveBy(0, 10);
+		} else {
+			if(!onFloor()) {
+				moveBy(0, 10);
+			}
 
 			var f:Entity = collide("floor", x, y);
 			if(f != null) {
-				y = f.y - 91;
+				y = f.y - (height - 1);
 			}
 		}
+	}
+
+	private function crouch():Void {
+		isCrouching = true;
+		graphic = crouchImg;
+		setHitbox(40, 71);
+		crouchTime = 0;
+	}
+
+	private function getUp():Void {
+		isCrouching = false;
+		graphic = walkingAnims[currentAnim];
+		setHitbox(40, 92);
 	}
 
 
@@ -163,12 +194,6 @@ class Player extends Entity {
 		checkCollision();
 		updateAnim(HXP.elapsed);
 		applyGravity();
-		/*if(jumping) {
-			jump();
-		} else if(!onFloor) {
-			moveBy(0, 10, "floor");
-		}*/
-
 
 		super.update();
 	}
