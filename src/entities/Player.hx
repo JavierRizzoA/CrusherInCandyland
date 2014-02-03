@@ -28,7 +28,7 @@ class Player extends Entity {
 	public function new(x:Float, y:Float) {
 		super(x, y);
 
-		setHitbox(66, 92);
+		setHitbox(40, 92);
 		type = "player";
 
 		Input.define("jump", [Key.SPACE]);

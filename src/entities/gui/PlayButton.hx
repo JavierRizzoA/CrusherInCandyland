@@ -4,6 +4,7 @@ import com.haxepunk.Entity;
 import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.utils.Input;
+import com.haxepunk.utils.Key;
 
 class PlayButton extends Entity {
 
@@ -13,6 +14,7 @@ class PlayButton extends Entity {
 		super(x, y);
 		image = new Image("graphics/gui/playButton.png");
 		graphic = image;
+		Input.define("space", [Key.SPACE]);
 		setHitbox(210, 70);
 	}
 
@@ -28,6 +30,9 @@ class PlayButton extends Entity {
 			}
 		} else {
 			image.alpha = 1;
+		}
+		if(Input.pressed("space")) {
+			HXP.scene = new scenes.TestScene();
 		}
 		super.update();
 	}
