@@ -41,11 +41,11 @@ class GameOver extends Scene {
 
 	public override function begin() {
 		addGraphic(Image.createCircle(50, 0xE7DFC2), 0, 510-25, 220-25);
-		addGraphic(bgImage);
+		addGraphic(bgImage, 10);
 		addGraphic(scoreText);
 		addGraphic(new Text("Killed by:", 495, 176, {color: 0x000000, size: 20}), 0);
 		addGraphic(killerImage, 0, 535 + offsetX, 245 + offsetY);
-		addGraphic(killerText, 535 - killerText.textWidth / 2, 290);
+		addGraphic(killerText, 0, 535 - killerText.textWidth / 2, 290);
 		add(playButton);
 		playButton.x -= playButton.width / 2;
 		playButton.y -= playButton.height / 2;
